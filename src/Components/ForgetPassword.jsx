@@ -17,7 +17,7 @@ const ForgetPassword = () => {
       const response = await axios.post(
         " https://email-backend-be9m.onrender.com/api/v1/users/forget-password",
         {email},
-        // { withCredentials: true }
+        { withCredentials: true }
       );
       setMessage(response.data.message);
 

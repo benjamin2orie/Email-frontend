@@ -28,7 +28,7 @@ const Signup = () => {
     try {
       const response = await axios.post(
         "https://email-backend-be9m.onrender.com/api/v1/users/signup",
-        formData,
+        {formData},
         { withCredentials: true }
       );
       // if (response.status === 200) {

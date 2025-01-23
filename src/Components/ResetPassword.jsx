@@ -32,7 +32,8 @@ const ResetPassword = () => {
           otp,
           password,
           confirmPassword,
-        }
+        },
+        {withCredentials: true}
       );
       setMessage(res.data.message);
       setTimeout(() =>{
