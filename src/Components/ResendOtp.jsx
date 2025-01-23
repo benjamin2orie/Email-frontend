@@ -16,7 +16,7 @@ const ResendOtp = () => {
       const response = await axios.post(
         "https://email-backend-be9m.onrender.com/api/v1/users/resend-otp",
         {email},
-        { withCredentials: true }
+        // { withCredentials: true }
       );
       setMessage(response.data.message || "Please verify your account with the new otp code send to your email");
       setTimeout(() =>{

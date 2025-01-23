@@ -29,7 +29,7 @@ const Signup = () => {
       const response = await axios.post(
         "https://email-backend-be9m.onrender.com/api/v1/users/signup",
         formData,
-        { withCredentials: true }
+        // { withCredentials: true }
       );
       // if (response.status === 200) {
       setMessage(response.data.message);
