@@ -17,7 +17,7 @@ const Login = () => {
       const response = await axios.post(
         "https://email-backend-be9m.onrender.com/api/v1/users/login",
         { email, password },
-        // { withCredentials: true }
+        { withCredentials: true }
       );
       setMessage(response.data.message);
       setError("");

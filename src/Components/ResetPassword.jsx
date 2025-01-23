@@ -33,7 +33,7 @@ const ResetPassword = () => {
           password,
           confirmPassword,
         },
-        // {withCredentials: true}
+        {withCredentials: true}
       );
       setMessage(res.data.message);
       setTimeout(() =>{
