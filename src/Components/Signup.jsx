@@ -27,7 +27,7 @@ const Signup = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:9030/api/v1/users/signup",
+        "https://email-backend-be9m.onrender.com/api/v1/users/signup",
         formData,
         { withCredentials: true }
       );

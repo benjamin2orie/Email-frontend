@@ -26,7 +26,7 @@ const ResetPassword = () => {
 
     try {
       const res = await axios.post(
-        "http://localhost:9030/api/v1/users/reset-password",
+        "https://email-backend-be9m.onrender.com/api/v1/users/reset-password",
         {
           email,
           otp,

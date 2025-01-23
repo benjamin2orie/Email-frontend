@@ -30,7 +30,7 @@ const OtpEmailVerificationCode = () => {
     try {
       const otpCode = otp.join("");
       const response = await axios.post(
-        "http://localhost:9030/api/v1/users/verify",
+        "https://email-backend-be9m.onrender.com/api/v1/users/verify",
         { otp: otpCode },
         {withCredentials: true}
       );
