@@ -29,13 +29,10 @@ const OtpEmailVerificationCode = () => {
     try {
       const otpCode = otp.join("");
       const response = await axios.post(
-        "https://email-backend-be9m.onrender.com/api/v1/users/verify-otp", // Ensure this endpoint is correct
+        "https://email-backend-be9m.onrender.com/api/v1/users/verify", // Ensure this endpoint is correct
         { otp: otpCode },
         {
           withCredentials: true, // Ensure cookies are included
-          headers: {
-            'Content-Type': 'application/json',
-          },
         }
       );
       setMessage(response.data.message);
