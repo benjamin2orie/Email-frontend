@@ -1,275 +1,96 @@
 
+// src/Otp.js
 import React, { useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import AuthBg from "./AuthBg";
 
-const Signup = () => {
-  const [formData, setFormData] = useState({
-    username: " ",
-    email: " ",
-    password: " ",
-    confirmPassword: " ",
-  });
-  // const [username, setUsername] = useState("");
-  // const [email, setEmail] = useState("");
-  // const [password, setPasswprd] = useState("");
-  // const [confirmPassword, setConfirmPassword] = useState("");
-
-  const [message, setMessage] = useState(" ");
+const OtpEmailVerificationCode = () => {
+  const [otp, setOtp] = useState(["", "", "", ""]);
+  const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+
   const navigate = useNavigate();
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+  const handleChange = (e, index) => {
+    const { value } = e.target;
+    if (value.match(/^[0-9]{0,1}$/)) {
+      // Only allow single digits
+      const newOtp = [...otp];
+      newOtp[index] = value;
+      setOtp(newOtp);
+      // Move focus to the next input field if a digit is entered
+      if (value && index < otp.length - 1) {
+        document.getElementById(`otp-${index + 1}`).focus();
+      }
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
+      const otpCode = otp.join("");
       const response = await axios.post(
-        "http://localhost:9030/api/v1/users/signup",
-        formData,
+        "https://email-backend-be9m.onrender.com/api/v1/users/verify",
+        { otp: otpCode },
         {withCredentials: true}
       );
       setMessage(response.data.message);
-      setError(" ");
-
-      setTimeout(() => {
-        navigate("/verify-otp");
+      setError("");
+      setTimeout(() =>{
+        navigate('/login');
       }, 2000);
-    } catch (error) {
+    } catch (err) {
       setError(
-        error.response.data.message ||
-          "An error occured. Please try again later"
+        err.response.data.message || "An error occurred. Please try again."
       );
-      setMessage(" ");
+      setMessage("");
     }
   };
+
   return (
     <AuthBg>
-      <div>
-        <div
-          className="align-center bg-[#EED] lg:h-[600px] h-[600px] align-content-center lg:w-[400px] w-[95%] lg:rounded-[3px] justify-items-center
-      pt-[2em] justify-self-center"
-        >
-          <h1 className="lg:text-[30px] text-[15px] capitalize">signup</h1>
-          <form onSubmit={handleSubmit}>
-            <div className="pb-[2em] flex flex-col">
-              <label className="capitalize" htmlFor="username">
-                username
-              </label>
-              <input
-                type="text"
-                name="username"
-                value={formData.username}
-                onChange={handleChange}
-                required
-                placeholder="Username"
-                className={
-                  error
-                    ? "border border-red-500 rounded-[2px]"
-                    : "border border-[#020202] outline-none rounded-[5px] bg-[#FFFFFF] w-[300px] h-[40px]"
-                }
-              />
-            </div>
-
-            <div className="pb-[2em] flex flex-col">
-              <label className="capitalize" htmlFor="email">
-                email
-              </label>
-              <input
-                type="email"
-                name="email"
-                // value={formData.email}
-                onChange={handleChange}
-                required
-                placeholder="email"
-                className={
-                  error
-                    ? "border border-red-500 rounded-[2px]"
-                    : "border border-[#020202] outline-none rounded-[5px] bg-[#FFFFFF] w-[300px] h-[40px]"
-                }
-              />
-            </div>
-
-            <div className="pb-[2em] flex flex-col">
-              <label className="capitalize" htmlFor="password">
-                password
-              </label>
-              <input
-                type="password"
-                name="password"
-                // value={formData.password}
-                onChange={handleChange}
-                required
-                placeholder="password"
-                className={
-                  error
-                    ? "border border-red-500 rounded-[2px]"
-                    : "border border-[#020202] outline-none rounded-[5px] bg-[#FFFFFF] w-[300px] h-[40px]"
-                }
-              />
-            </div>
-
-            <div className="pb-[2em] flex flex-col">
-              <label className="capitalize" htmlFor="confirmPassword">
-                confirm password
-              </label>
-              <input
-                type="password"
-                name="confirmPassword"
-                // value={formData.confirmPassword}
-                onChange={handleChange}
-                required
-                placeholder="confirmPassword"
-                className={
-                  error
-                    ? "border border-red-500 rounded-[2px]"
-                    : "border border-[#020202] outline-none rounded-[5px] bg-[#FFFFFF] w-[300px] h-[40px]"
-                }
-              />
-            </div>
-
-            <button
-              type="submit"
-              className="bg-[#000] w-[200px] h-[50px] text-[#FFFFFF]
-              text-[20px] capitalize rounded-[5px]"
-            >
-              signup
-            </button>
-          </form>
-
-          <div className="flex gap-[3em] mt-[2em]">
-            <p>Already have an account!</p>
-            <Link
-              className="capitalize text-green-500 cursor-pointer"
-              to="/login"
-            >
-              login
-            </Link>
-          </div>
-
-          {message && <p className="text-[#020202] p-[2em]">{message}</p>}
-          {error && <p className="text-red-500 p-[2em]">{error}</p>}
+    <div className="justify-items-center lg:mt-[10em] mt-[7em]">
+      <h1 className="lg:pb-[2em] pb-[4em] lg:text-[30px] text-[15px] lg:text-[#EED] text-[#020202]">
+        Enter the OTP code send to your email
+      </h1>
+      <form onSubmit={handleSubmit}>
+        <div className="flex lg:gap-[4em] gap-[2em]">
+          {otp.map((value, index) => (
+            <input
+              key={index}
+              id={`otp-${index}`}
+              type="text"
+              value={value}
+              onChange={(e) => handleChange(e, index)}
+              className={
+                error
+                  ? "border border-red-500 w-[50px] h-[40px] text-center"
+                  : "border w-[50px] h-[40px] border-[#020202] text-center"
+              }
+              maxLength="1"
+              required
+            />
+          ))}
         </div>
-      </div>
+        <div className="flex gap-[3em] mt-[3em]">
+          <button
+            type="submit"
+            className="lg:bg-blue-500 bg-[#020202] text-[#FFFFFF] lg:w-[200px] w-[100px] h-[40px] rounded ml-[3em]"
+          >
+            Verify OTP
+          </button>
+
+          <div className=" border lg:border-blue-500 border-[#020202] lg:text-[#FFFFFF] text-[#020202] lg:w-[200px] pt-[0.5em] rounded w-[100px] text-[15px] capitalize text-center h-[40px]">
+            <Link to="/resend-otp">resend otp</Link>
+          </div>
+        </div>
+      </form>
+      {message && <p className="lg:text-[#EED] text-[#020202] pt-[2em]">{message}</p>}
+      {error && <p className="text-red-500 lg:text-[20px] text-[12px] pl-[1em] pr-[1em] pt-[3em]">{error}</p>}
+    </div>
     </AuthBg>
   );
 };
 
-export default Signup;
-
-// import React, { useState } from "react";
-// import axios from "axios";
-// import { useNavigate } from "react-router-dom";
-
-// const Signup = () => {
-//   const [formDate, setFormData] = useState({
-//     username: "",
-//     email: "",
-//     password: "",
-//     confirmPassword: "",
-//   });
-
-//   const [message, setMessage] = useState("");
-//   const [error, setError] = useState("");
-//   const navigate = useNavigate();
-
-//   const handleChange = (e) => {
-//     const { name, value } = e.target;
-
-//     setFormData({
-//       ...formDate,
-//       [name]: value,
-//     });
-//   };
-
-//   const handleSubmit = async (e) => {
-//     e.preventdefault();
-
-//     try {
-//       const response = await axios.post(
-//         "http://localhost:9030/api/v1/users/signup",
-//         formDate
-//       );
-//       setMessage(response.data.message);
-
-//       setTimeout(() => {
-//         navigate("/verify-otp");
-//       }, 20000);
-
-//       setError("");
-//     } catch (err) {
-//       setError(err.response.data.message) || " Registration faild";
-//       setMessage("");
-//     }
-//   };
-
-//   return (
-//     <AuthBg>
-//       <h2 className="text-red-500">signup</h2>
-
-//       <form onSubmit={handleSubmit}>
-//         <div className="pb-[2em]">
-//           <label htmlFor="username">username</label>
-//           <input
-//             type="text"
-//             name="username"
-//             value={formDate.username}
-//             onChange={handleChange}
-//             required
-//             placeholder="Username"
-//           />
-//         </div>
-
-//          <div className="pb-[2em]">
-//            <label htmlFor="email">email</label>
-//             <input
-//             type="email"
-//             name="email"
-//             value={formDate.email}
-//             onChange={handleChange}
-//             required
-//             placeholder="Email"
-//           />
-//         </div>
-
-//           <div className="pb-[2em]">
-//             <label htmlFor="password">password</label>
-//             <input
-//             type="password"
-//             name="password"
-//             value={formDate.password}
-//             onChange={handleChange}
-//             required
-//             placeholder="password"
-//           />
-//         </div>
-
-//           <div>
-//             <label htmlFor="confirmPassword">confirm password</label>
-//             <input
-//             type="password"
-//             name="confirmPassword"
-//             value={formDate.confirmPassword}
-//             onChange={handleChange}
-//             required
-//             placeholder="confirmPassword"
-//           />
-//         </div>8i
-
-//         <button type="submit">submit</button>
-//       </form>
-
-//       <div>
-//         {message && <p>{message}</p>}
-//         {error && <p>{error}</p>}
-//       </div>
-//     </AuthBg>
-//   );
-// };
-
-// export default Signup;
+export default OtpEmailVerificationCode;
