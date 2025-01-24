@@ -30,8 +30,10 @@ const OtpEmailVerificationCode = () => {
       const otpCode = otp.join("");
       const response = await axios.post(
         "https://email-backend-be9m.onrender.com/api/v1/users/verify", // Ensure this endpoint is correct
-        { otp: otpCode }
-
+        { otp: otpCode },
+        {
+          withCredentials: true, 
+        }
       );
       setMessage(response.data.message);
       setError("");
