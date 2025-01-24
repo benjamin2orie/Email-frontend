@@ -32,7 +32,10 @@ const OtpEmailVerificationCode = () => {
         "https://email-backend-be9m.onrender.com/api/v1/users/verify", // Ensure this endpoint is correct
         { otp: otpCode },
         {
-          withCredentials: true, // Ensure cookies are included
+          withCredentials: true, 
+          headers: {
+            'Content-Type': 'application/json',
+          }
         }
       );
       setMessage(response.data.message);
