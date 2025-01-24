@@ -33,6 +33,9 @@ const OtpEmailVerificationCode = () => {
         { otp: otpCode },
         {
           withCredentials: true, 
+          headers: {
+            'Content-Type': 'application/json',
+          },
         }
       );
       setMessage(response.data.message);
