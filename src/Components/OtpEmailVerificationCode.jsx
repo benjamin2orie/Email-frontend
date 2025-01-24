@@ -86,7 +86,7 @@ const OtpEmailVerificationCode = () => {
         </div>
       </form>
       {message && <p className="lg:text-[#EED] text-[#020202] pt-[2em]">{message}</p>}
-      {error && <p className="text-red-500 text-[20px] pt-[3em]">{error}</p>}
+      {error && <p className="text-red-500 lg:text-[20px] text-[12px] pl-[1em] pr-[1em] pt-[3em]">{error}</p>}
     </div>
     </AuthBg>
   );
